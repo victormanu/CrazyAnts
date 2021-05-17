@@ -18,11 +18,7 @@ all: $(CETHREADS_OBJ) library
 
 library: $(CETHREADS_OBJ)
 	$(AR) $(LIB_DIR)/$(LIBRARY) $(CETHREADS_OBJ)
-	$(RANLIB) $(LIB_DIR)/$(LIBRARY)
-	cp -f $(HEADER) $(INC_DIR)   
-
-copy:
-	cp -f $(HEADER) $(INC_DIR)          
+	$(RANLIB) $(LIB_DIR)/$(LIBRARY)       
 
 clean:
 	$(RM) -f *.o $(LIB_DIR)/* $(CETHREAD_OBJ)
