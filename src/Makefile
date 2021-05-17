@@ -3,8 +3,8 @@ CFLAGS = -g -Wall   # default is CFLAGS = [blank]
 AR = ar -cvq
 RANLIB = ranlib
 PROJ_DIR = ..
-INC_DIR = $(PROJ_DIR)/include
-LIB_DIR = $(PROJ_DIR)/lib
+INC_DIR = $(PROJ_DIR)/src
+LIB_DIR = $(PROJ_DIR)
 CETHREADS_SRC = CEthread.c steque.c
 CETHREADS_OBJ = $(patsubst %.c,%.o,$(CETHREADS_SRC))
 HEADER = CEthread.h steque.h
