@@ -18,7 +18,7 @@ void* parallel(void * arg){
 }
 
 void* schedulerC1(void* arg){
-    sche(readyLists.readyListC1L);
+    sche(readyLists.readyListC1L, readyLists.readyListC1L, 1);//readyLists.readyListC1L
     return NULL;
 }
 
@@ -30,7 +30,7 @@ void hilos(int _horm, int _canal){
         if(_canal == 1){
             readyLists.readyListC1L[readyLists.counterC1L] = thread;
             readyLists.counterC1L += 1;
-            sche(readyLists.readyListC1L);
+            sche(readyLists.readyListC1L, readyLists.readyListC1L, 1);//readyLists.readyListC1L
         }else if(_canal == 2){
             readyLists.readyListC2L[readyLists.counterC2L] = thread;
             readyLists.counterC2L += 1;
