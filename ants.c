@@ -14,7 +14,6 @@ _strAnts newAnt(int _id, int _horm, int _canal, int _type){
 }
 
 void* parallel(void * arg){
-    printf("Qué duro Jerry\n");
     return NULL;
 }
 
@@ -63,8 +62,6 @@ int main(){
     readyLists.counterC2R = 0;
     readyLists.counterC3L = 0;
     readyLists.counterC3R = 0;
-
-    
 
     _strAntsHill h1;
     _strAntsHill h2;

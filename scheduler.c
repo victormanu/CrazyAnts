@@ -1,6 +1,6 @@
 #include "scheduler.h" 
 
-void sche(cethread_t *listLeft){
+void sche(cethread_t *listLeft, cethread_t *listRight, int algorithm){
     printf("Hola\n");
     if(listLeft[0] == NULL){
         printf("Adios\n");

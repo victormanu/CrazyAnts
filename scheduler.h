@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "threads/CEthread.h"
 
-void sche(cethread_t *pStackL);
+void sche(cethread_t *listLeft, cethread_t *listRight, int algorithm);
 
 
 #endif

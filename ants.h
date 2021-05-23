@@ -23,7 +23,6 @@ typedef struct {
 
 _readyLists readyLists;
 
-
 typedef struct {
     int speed;
     int type;
