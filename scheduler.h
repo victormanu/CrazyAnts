@@ -5,8 +5,10 @@
 #include <string.h>
 #include <stdio.h>
 #include "threads/CEthread.h"
+#include "ants.h"
 
-void sche(cethread_t *listLeft, cethread_t *listRight, int algorithm);
+void sche( _strAnts *listLeft,  _strAnts *listRight, 
+	int algorithm, int wValue, int time);
 
 
 #endif
