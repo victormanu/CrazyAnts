@@ -8,7 +8,7 @@
 #include "ants.h"
 
 void sche( _strAnts *listLeft,  _strAnts *listRight, 
-	int algorithm, int wValue, int time);
+	int algorithm, _configCanal conf);
 
 
 #endif

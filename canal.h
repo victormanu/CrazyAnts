@@ -11,6 +11,7 @@ typedef struct configCanal{
     int orderedAnts;
     int signTime;
     int parameterW;
+    int canalTime;
 } _configCanal;
 
 _configCanal canalConfig(int _canal);

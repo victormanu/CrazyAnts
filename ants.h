@@ -2,6 +2,7 @@
 #define _ANTS_H
 
 #include "threads/CEthread.h"
+#include "canal.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>

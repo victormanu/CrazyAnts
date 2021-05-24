@@ -1,14 +1,14 @@
 #include "ants.h"
 #include "scheduler.h" 
-#include "canal.h"
 #include "threads/CEthread.h"
 
 _strAnts newAnt(int _id, int _horm, int _canal, int _type){
     _strAnts ant;
-    ant.speed = 10;
+    ant.speed = 10*_type;
     ant.canal = _canal;
     ant.horm = _horm;
     ant.id = _id;
+    ant.type = _type;
     return ant;
 }
 
@@ -18,9 +18,8 @@ void* parallel(void *arg){
 
 void* schedulerC1(void *arg){
     _configCanal conf = canalConfig(1);
-    printf("controlMethod: %d\n", conf.controlMethod);
     sche(readyLists.readyListC1L, readyLists.readyListC1R, 
-        PRIORITY, conf.parameterW, 10);
+        PRIORITY, conf);
     return NULL;
 }
 
@@ -36,7 +35,7 @@ void hilos(int _horm, int _canal, _strAnts _ant){
             _configCanal conf = canalConfig(1);
             printf("controlMethod: %d\n", conf.controlMethod);
             sche(readyLists.readyListC1L, readyLists.readyListC1R, 
-                PRIORITY, conf.parameterW, 10);
+                PRIORITY, conf);
         }else if(_canal == 2){
             readyLists.readyListC2L[readyLists.counterC2L] = _ant;
             readyLists.counterC2L += 1;
