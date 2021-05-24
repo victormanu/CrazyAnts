@@ -1,5 +1,6 @@
 #include "ants.h"
 #include "scheduler.h" 
+#include "canal.h"
 #include "threads/CEthread.h"
 
 _strAnts newAnt(int _id, int _horm, int _canal, int _type){
@@ -11,12 +12,15 @@ _strAnts newAnt(int _id, int _horm, int _canal, int _type){
     return ant;
 }
 
-void* parallel(void * arg){
+void* parallel(void *arg){
     return NULL;
 }
 
-void* schedulerC1(void* arg){
-    sche(readyLists.readyListC1L, readyLists.readyListC1R, FCFS, W_VALUE, 10);
+void* schedulerC1(void *arg){
+    _configCanal conf = canalConfig(1);
+    printf("controlMethod: %d\n", conf.controlMethod);
+    sche(readyLists.readyListC1L, readyLists.readyListC1R, 
+        PRIORITY, conf.parameterW, 10);
     return NULL;
 }
 
@@ -29,7 +33,10 @@ void hilos(int _horm, int _canal, _strAnts _ant){
         if(_canal == 1){
             readyLists.readyListC1L[readyLists.counterC1L] = _ant;
             readyLists.counterC1L += 1;
-            sche(readyLists.readyListC1L, readyLists.readyListC1R, FCFS, W_VALUE, 10);
+            _configCanal conf = canalConfig(1);
+            printf("controlMethod: %d\n", conf.controlMethod);
+            sche(readyLists.readyListC1L, readyLists.readyListC1R, 
+                PRIORITY, conf.parameterW, 10);
         }else if(_canal == 2){
             readyLists.readyListC2L[readyLists.counterC2L] = _ant;
             readyLists.counterC2L += 1;
@@ -49,8 +56,6 @@ void hilos(int _horm, int _canal, _strAnts _ant){
             readyLists.counterC3R += 1;
         }
     }
-    printf("%d\n",readyLists.counterC1L);
-    readyLists.counterC1L += 1;
 }
 
 int main(){
@@ -84,7 +89,6 @@ int main(){
         h1.ants[i] = ant;
         //while (getchar() != ENTER_ASCII_CODE);
         hilos(horm, canal, ant);
-        printf("Id hormiga: %d\n", h1.ants[i].id);
         i++;
     }
 

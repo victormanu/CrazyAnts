@@ -1,7 +1,7 @@
 #include "scheduler.h" 
 
 void priority(_strAnts *list){
-
+    
 }
 
 void setOrder(_strAnts *list, int algorithm, 

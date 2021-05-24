@@ -7,14 +7,18 @@
 #include <stdio.h>
 
 #define ENTER_ASCII_CODE 10
-#define W_VALUE 5
 
 // Calendarizadores
-#define PRIORITY 1
-#define RR 2
-#define FCFS 3
-#define SJF 4
+#define PRIORITY  1
+#define RR        2
+#define FCFS      3
+#define SJF       4
 #define REAL_TIME 5
+
+// Algortimos de ingreso al canal
+#define EQUID 1
+#define SIGN  2
+#define TICO  3
 
 typedef struct {
     int speed;
@@ -41,8 +45,6 @@ typedef struct {
 } _readyLists; 
 
 _readyLists readyLists;
-
-
 
 typedef struct {
     _strAnts ants[10];
