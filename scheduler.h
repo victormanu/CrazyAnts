@@ -7,12 +7,16 @@
 #include "threads/CEthread.h"
 #include "ants.h"
 
+#define AVAILABLE 0
+#define BUSY  	  1
+
 typedef struct {
 	_strAnts ants[ANTS_NUMBER];
 	int idCanal;
 	int counterLeft;
 	int counterRight;
 	int sides;
+	int state;
 } _strCanal;
 
 void sche( _strAnts *listLeft,  _strAnts *listRight, 

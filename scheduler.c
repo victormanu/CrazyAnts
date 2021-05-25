@@ -153,7 +153,7 @@ int getCounterCanal(_strCanal canal, int site){
     }
 }
 
-void setCanalCounter(_strCanal _canal, int site){
+void addCanalCounter(_strCanal _canal, int site){
     if(site == LEFT){
         _canal.counterLeft += 1;
     }else{
@@ -185,7 +185,6 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
                     break;
                 }
                 canal.ants[i] = listRight[i];
-                setCanalCounter(canal, RIGHT);
             }
             canal.sides = LEFT;
         }else{
@@ -194,12 +193,12 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
                     break;
                 }
                 canal.ants[i] = listRight[i];
-                setCanalCounter(canal, RIGHT);
+                addCanalCounter(canal, RIGHT);
             }
         }
         int counter = getCounterCanal(canal, RIGHT);
         if(counter >= _w){
-            getCanal(_canal);
+            canal.sides = LEFT;
         }
     }else{
         printf("Izquierda\n");
@@ -210,31 +209,67 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
                 if(listLeft[i].id == 0){
                     break;
                 }
-                canal.ants[i] = listRight[i];
-                setCanalCounter(canal, RIGHT);
+                canal.ants[i] = listLeft[i];
             }
-            canal.sides = LEFT;
+            canal.sides = RIGHT;
         }else{
             for(int i = 0; i < size(listLeft); i++){
                 if(listLeft[i].id == 0){
                     break;
                 }
-                canal.ants[i] = listRight[i];
-                setCanalCounter(canal, RIGHT);
+                canal.ants[i] = listLeft[i];
+                addCanalCounter(canal, LEFT);
             }
         }
-        if(getCounterCanal(canal, RIGHT) >= _w){
-            getCanal(_canal);
+        int counter = getCounterCanal(canal, RIGHT);
+        if(counter >= _w){
+            canal.sides = RIGHT;
         }
     }
 }
 
-void sign(_strAnts *listLeft, _strAnts *listRight, int _sign, int algorithm){
-
+void sign(_strAnts *listLeft, _strAnts *listRight, int _sign, int algorithm, int _canal){
+    canal = getCanal(_canal);
+    if(_sign == LEFT){
+        listLeft = setOrder(listLeft, algorithm);
+        for(int i = 0; i < size(listLeft); i++){
+            if(listLeft[i].id == 0){
+                break;
+            }
+            canal.ants[i] = listLeft[i];
+        }
+    }else{
+        listRight = setOrder(listRight, algorithm);
+        for(int i = 0; i < size(listRight); i++){
+            if(listRight[i].id == 0){
+                break;
+            }
+            canal.ants[i] = listRight[i];
+        }
+    }
 }
 
-void tico(){
-
+void tico(_strAnts *listLeft, _strAnts *listRight, int algorithm, int _canal){
+    canal = getCanal(_canal);
+    if(listLeft[0].thread == 0){
+        canal.state = BUSY;
+        listRight = setOrder(listRight, algorithm);
+        for(int i = 0; i < size(listRight); i++){
+            if(listRight[i].id == 0){
+                break;
+            }
+            canal.ants[i] = listRight[i];
+        }
+    }else{
+        canal.state = BUSY;
+        listLeft = setOrder(listLeft, algorithm);
+        for(int i = 0; i < size(listLeft); i++){
+            if(listLeft[i].id == 0){
+                break;
+            }
+            canal.ants[i] = listLeft[i];
+        }
+    }
 }
 
 void sche(_strAnts *listLeft, _strAnts *listRight, 
@@ -242,9 +277,9 @@ void sche(_strAnts *listLeft, _strAnts *listRight,
     if(conf.controlMethod == EQUID){
         equid(conf.parameterW, algorithm, listLeft, listRight, conf.idCanal);
     }else if(conf.controlMethod == SIGN){
-        sign(listLeft, listRight, LEFT, algorithm);
+        sign(listLeft, listRight, LEFT, algorithm, conf.idCanal);
     }else if(conf.controlMethod == TICO){
-        tico(listLeft, listRight, algorithm);
+        tico(listLeft, listRight, algorithm, conf.idCanal);
     }
 }
 /*
