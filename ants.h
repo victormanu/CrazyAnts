@@ -9,6 +9,12 @@
 
 #define ENTER_ASCII_CODE 10
 
+#define SIZE_OF_LIST 4
+
+#define ANTS_NUMBER 4
+#define LEFT  0
+#define RIGHT 1
+
 // Calendarizadores
 #define PRIORITY  1
 #define RR        2
@@ -21,6 +27,8 @@
 #define SIGN  2
 #define TICO  3
 
+#define QUANTUM 5.7
+
 typedef struct {
     int speed;
     int type;
@@ -28,6 +36,7 @@ typedef struct {
     int horm;
     int id;
     cethread_t thread;
+    float executionTime;
 }_strAnts;
 
 typedef struct {
@@ -37,18 +46,18 @@ typedef struct {
 	int counterC2R;
 	int counterC3L;
 	int counterC3R;
-	_strAnts readyListC1L[10];
-	_strAnts readyListC1R[10];
-	_strAnts readyListC2L[10];
-	_strAnts readyListC2R[10];
-	_strAnts readyListC3L[10];
-	_strAnts readyListC3R[10];
+	_strAnts readyListC1L[ANTS_NUMBER];
+	_strAnts readyListC1R[ANTS_NUMBER];
+	_strAnts readyListC2L[ANTS_NUMBER];
+	_strAnts readyListC2R[ANTS_NUMBER];
+	_strAnts readyListC3L[ANTS_NUMBER];
+	_strAnts readyListC3R[ANTS_NUMBER];
 } _readyLists; 
 
 _readyLists readyLists;
 
 typedef struct {
-    _strAnts ants[10];
+    _strAnts ants[ANTS_NUMBER];
 }_strAntsHill;
 
 #endif

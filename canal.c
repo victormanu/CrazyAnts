@@ -1,9 +1,4 @@
 #include "canal.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
-//#define CONF_PATH  "./conf/canal.conf"
 
 _configCanal conf;
 
@@ -42,6 +37,9 @@ _configCanal canalConfig(int _canal){
             }
             else if(!strcmp(prev,"canalTime")){
                 conf.canalTime = atoi(current);
+            }
+            else if(!strcmp(prev,"idCanal")){
+                conf.idCanal = atoi(current);
             }
             strcpy(prev, current);
             current = strtok (NULL, "=:");

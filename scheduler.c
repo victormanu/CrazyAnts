@@ -1,70 +1,263 @@
 #include "scheduler.h" 
 
-void priority(_strAnts *list){
+int size(_strAnts *list){
+    int counter = 0;
+    for(int i = 0; i < 100; i++){
+        if(list[i].id == 0){
+            break;
+        }
+        counter++;
+    } 
+    return counter;
+}
+
+/* 
+    Alogirtmo FCFS: Primero en Llegar, Primero en ser Servido
+ */
+_strAnts* first_Come_First_Served(_strAnts *list){
+    //_strAnts reorderedList[SIZE_OF_LIST];
+    _strAnts reorderedList;
+    for(int i = 0; i < SIZE_OF_LIST; i++){
+        if(list[i].id == 0){        
+            break;
+        }
+        reorderedList = list[i];
+        list[i] = reorderedList;
+    }
+    // Impresiones de prueba
+    for(int i = 0; i < SIZE_OF_LIST; i++){
+        if(list[i].id == 0){         
+            break;
+        }
+        printf(" \n");
+        printf("Speed: %d \n", list[i].speed);
+        printf("Type: %d \n", list[i].type);
+        printf("Canal: %d \n", list[i].canal);
+        printf("Ant: %d \n", list[i].horm);
+        printf("id: %d \n", list[i].id);    
+        printf("Tiempo de ejecucion: %f \n", list[i].executionTime);
+        printf(" \n");
+        printf("Number of elements present in given array: %d \n", size(list));    
+    }
+    return list;
+}
+/*
+  Algoritmo SJF: Primero el trabajo mas corto
+*/
+_strAnts* shortest_Job_First(_strAnts *list){
+    _strAnts tmpi;
+    _strAnts tmpj;
+
+    for(int i = 0; i < SIZE_OF_LIST; i++){
+        if(list[i].id == 0){         
+            break;
+        }
+        tmpi = list[i];
+
+        for(int j = i + 1; i < SIZE_OF_LIST; j++) {
+            if(list[j].id == 0){
+                break;
+            }
+            tmpj = list[j];            
+            if(tmpi.executionTime > tmpj.executionTime){
+                list[i] = tmpj;
+                list[j] = tmpi;
+                tmpi = list[i];
+            }
+        } 
+    }
+    // Print just for testing 
+    for(int i = 0; i < SIZE_OF_LIST; i++){
+        if(list[i].id == 0){         
+            //printf("\nPRIORITY NULL\n"); 
+            break;
+        }
+        printf(" \n");
+        printf("Speed: %d \n", list[i].speed);
+        printf("Type: %d \n", list[i].type);
+        printf("Canal: %d \n", list[i].canal);
+        printf("Ant: %d \n", list[i].horm);
+        printf("id: %d \n", list[i].id);
+        printf("Tiempo de ejecucion: %f \n", list[i].executionTime);
+        printf(" \n");
+        //int length = sizeof(list)/sizeof(list[0]);            
+        printf("Number of elements present in given array: %d", size(list));    
+        printf(" \n");
+    }
+    return list;
+}
+
+/*
+    Algoritmo RR: Round Robin
+    Quantum: cantidad de tiempo que se le va a permitir a cada proceso estar en el procesador
+*/
+void roundRobin(_strAnts *list, float Quantum){
+
+}
+
+// Calendarizador de prioridad
+_strAnts* priority(_strAnts *list){
     _strAnts tmpi;
     _strAnts tmpj;
     printf("INSIDE PRIORITY\n"); 
-    for(int i = 0; i < 10; i++){
-        if(list[i].id == NULL){ 
-            printf(" PRIORITY NULL\n"); 
+    for(int i = 0; i < SIZE_OF_LIST; i++){
+        if(list[i].id == 0){
             break;
-        }else{
-            printf(" \n ");
-            printf("Speed: %d \n", list[i].speed);
-            printf("Type: %d \n", list[i].type);
-            printf("Canal: %d \n", list[i].canal);
-            printf("Ant: %d \n", list[i].horm);
-            printf("id: %d \n", list[i].id);
-            printf(" \n ");
         }
+        tmpi = list[i];
 
-        //tmpi.speed = list[i]->speed;
-
-        /*
-        for(size_t j = i + 1; i < 10; j++){
-            if(list[j] == NULL) break;
-            tmpj = *list[j];
-            //if(tmpj.algorithm != PRIORITY) break;
-
-            if(tmpi.priority > tmpj.priority){
-                *list[i] = tmpj;
-                *list[j] = tmpi;
-                tmpi = pStack[i];
+        for(int j = i + 1; i < SIZE_OF_LIST; j++) {
+            if(list[j].id == 0){
+                break;
             }
-        }*/
+            tmpj = list[j];
+            if(tmpi.speed < tmpj.speed){
+                list[i] = tmpj;
+                list[j] = tmpi;
+                tmpi = list[i];
+            }
+        } 
     }
-    //printf("Stack ordenado: \n");
-    //print_stack(pStack);
-    //printf("Creando thread con pid: %d \n", pStack[0]->pid);
-    //lpthread_create(pStack[0]);
-    //waitpid(pStack[0]->pid, 0, 0);
-    //lpthread_end(pStack[0]);
-    //remove_by_index(pStack, 0);
-    //return 0;
+    return list;
 }
 
-void setOrder(_strAnts *list, int algorithm, _configCanal conf){
-    if (algorithm == RR) {                                                                 // Don't sort
-        printf("Algoritmo: RR\n");         
+_strAnts* setOrder(_strAnts *list, int algorithm){
+    if (algorithm == RR) {                            
+        printf("Algoritmo: RR\n");
+        roundRobin(list, QUANTUM);
+        return list;         
     }
     else if (algorithm == PRIORITY) {
         printf("Algoritmo: Prioridad\n");
-        priority(list);
+        list = priority(list);
+        return list;
     }
+    else if (algorithm == FCFS){
+        printf("\nAlgoritmo: FCFS\n");
+        list = first_Come_First_Served(list);
+        printf("Es\n");
+        return list;
+    }
+    else if (algorithm == SJF){
+        printf("\nAlgoritmo: SJF\n");
+        list = shortest_Job_First(list);
+        return list;
+    }
+}
+
+int getCounterCanal(_strCanal canal, int site){
+    if(site == LEFT){
+        return canal.counterLeft;
+    }else{
+        return canal.counterRight;
+    }
+}
+
+void setCanalCounter(_strCanal _canal, int site){
+    if(site == LEFT){
+        _canal.counterLeft += 1;
+    }else{
+        _canal.counterRight += 1;
+    }
+}
+
+_strCanal getCanal(int canal){
+    _strCanal theCanal;
+    switch(canal){
+        case 1:
+            theCanal = canal1;
+        case 2:
+            theCanal = canal2;
+        default:
+            theCanal = canal3;
+    }
+    return theCanal;
+}
+
+void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _canal){
+    canal = getCanal(_canal);
+    if(canal.sides == RIGHT){
+        printf("Derecha\n");
+        listRight = setOrder(listRight, algorithm);
+        if(size(listRight) >= _w){
+            for(int i = 0; i < _w; i++){
+                if(listRight[i].id == 0){
+                    break;
+                }
+                canal.ants[i] = listRight[i];
+                setCanalCounter(canal, RIGHT);
+            }
+            canal.sides = LEFT;
+        }else{
+            for(int i = 0; i < size(listRight); i++){
+                if(listRight[i].id == 0){
+                    break;
+                }
+                canal.ants[i] = listRight[i];
+                setCanalCounter(canal, RIGHT);
+            }
+        }
+        int counter = getCounterCanal(canal, RIGHT);
+        if(counter >= _w){
+            getCanal(_canal);
+        }
+    }else{
+        printf("Izquierda\n");
+        listLeft = setOrder(listLeft, algorithm);
+         printf("Parte\n");
+        if(size(listLeft) >= _w){
+            for(int i = 0; i < _w; i++){
+                if(listLeft[i].id == 0){
+                    break;
+                }
+                canal.ants[i] = listRight[i];
+                setCanalCounter(canal, RIGHT);
+            }
+            canal.sides = LEFT;
+        }else{
+            for(int i = 0; i < size(listLeft); i++){
+                if(listLeft[i].id == 0){
+                    break;
+                }
+                canal.ants[i] = listRight[i];
+                setCanalCounter(canal, RIGHT);
+            }
+        }
+        if(getCounterCanal(canal, RIGHT) >= _w){
+            getCanal(_canal);
+        }
+    }
+}
+
+void sign(_strAnts *listLeft, _strAnts *listRight, int _sign, int algorithm){
+
+}
+
+void tico(){
+
 }
 
 void sche(_strAnts *listLeft, _strAnts *listRight, 
     int algorithm, _configCanal conf){
-    if(listLeft[0].thread == NULL){
-        if(listRight[0].thread == NULL){
-            printf("Vacías ambas\n");
-        }else{
-            printf("Vacía la de izquierda\n");
-            setOrder(listRight, algorithm, conf);
-        }
-    }else{
-        printf("Vacía la de derecha\n");
-        setOrder(listLeft, algorithm, conf);
-
+    if(conf.controlMethod == EQUID){
+        equid(conf.parameterW, algorithm, listLeft, listRight, conf.idCanal);
+    }else if(conf.controlMethod == SIGN){
+        sign(listLeft, listRight, LEFT, algorithm);
+    }else if(conf.controlMethod == TICO){
+        tico(listLeft, listRight, algorithm);
     }
 }
+/*
+ // Print just for testing 
+            for(int i = 0; i < SIZE_OF_LIST; i++){
+                if(listRight[i].id == 0){ 
+                    break;
+                }
+                printf(" \n");
+                printf("Speed: %d \n", listRight[i].speed);
+                printf("Type: %d \n", listRight[i].type);
+                printf("Canal: %d \n", listRight[i].canal);
+                printf("Ant: %d \n", listRight[i].horm);
+                printf("id: %d \n", listRight[i].id);
+                printf(" \n");
+            }*/

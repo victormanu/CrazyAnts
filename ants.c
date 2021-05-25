@@ -2,13 +2,14 @@
 #include "scheduler.h" 
 #include "threads/CEthread.h"
 
-_strAnts newAnt(int _id, int _horm, int _canal, int _type){
+_strAnts newAnt(int _id, int _horm, int _canal, int _type, float _execTime){
     _strAnts ant;
     ant.speed = 10*_type;
     ant.canal = _canal;
     ant.horm = _horm;
     ant.id = _id;
     ant.type = _type;
+    ant.executionTime = _execTime;
     return ant;
 }
 
@@ -18,8 +19,8 @@ void* parallel(void *arg){
 
 void* schedulerC1(void *arg){
     _configCanal conf = canalConfig(1);
-    sche(readyLists.readyListC1L, readyLists.readyListC1R, 
-        PRIORITY, conf);
+    /*sche(readyLists.readyListC1L, readyLists.readyListC1R, 
+        PRIORITY, conf);*/
     return NULL;
 }
 
@@ -39,20 +40,40 @@ void hilos(int _horm, int _canal, _strAnts _ant){
         }else if(_canal == 2){
             readyLists.readyListC2L[readyLists.counterC2L] = _ant;
             readyLists.counterC2L += 1;
+            _configCanal conf = canalConfig(2);
+            printf("controlMethod: %d\n", conf.controlMethod);
+            sche(readyLists.readyListC2L, readyLists.readyListC2R, 
+                FCFS, conf);
         }else{
             readyLists.readyListC3L[readyLists.counterC3L] = _ant;
             readyLists.counterC3L += 1;
+            _configCanal conf = canalConfig(3);
+            printf("controlMethod: %d\n", conf.controlMethod);
+            sche(readyLists.readyListC3L, readyLists.readyListC3R, 
+                SJF, conf);
         }
     }else{
         if(_canal == 1){
             readyLists.readyListC1R[readyLists.counterC1R] = _ant;
             readyLists.counterC1R += 1;
+            _configCanal conf = canalConfig(1);
+            printf("controlMethod: %d\n", conf.controlMethod);
+            sche(readyLists.readyListC1L, readyLists.readyListC1R, 
+                PRIORITY, conf);
         }else if(_canal == 2){
             readyLists.readyListC2R[readyLists.counterC2R] = _ant;
             readyLists.counterC2R += 1;
+            _configCanal conf = canalConfig(2);
+            printf("controlMethod: %d\n", conf.controlMethod);
+            sche(readyLists.readyListC2L, readyLists.readyListC2R, 
+                FCFS, conf);
         }else{
             readyLists.readyListC3R[readyLists.counterC3R] = _ant;
             readyLists.counterC3R += 1;
+            _configCanal conf = canalConfig(3);
+            printf("controlMethod: %d\n", conf.controlMethod);
+            sche(readyLists.readyListC3L, readyLists.readyListC3R, 
+                SJF, conf);
         }
     }
 }
@@ -65,11 +86,13 @@ int main(){
     readyLists.counterC2R = 0;
     readyLists.counterC3L = 0;
     readyLists.counterC3R = 0;
+    canal1.sides = LEFT;
 
     _strAntsHill h1;
     _strAntsHill h2;
 
     int horm, canal, type;
+    float exec;
     int i = 1;
 
     cethread_init(1);
@@ -84,7 +107,9 @@ int main(){
         scanf("%d", &horm);
         printf("Canal: ");
         scanf("%d", &canal);
-        _strAnts ant = newAnt(i, horm, canal, type);
+        printf("Exec: ");
+        scanf("%f", &exec);
+        _strAnts ant = newAnt(i, horm, canal, type, exec);
         h1.ants[i] = ant;
         //while (getchar() != ENTER_ASCII_CODE);
         hilos(horm, canal, ant);
