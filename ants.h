@@ -35,6 +35,7 @@ typedef struct {
     int canal;
     int horm;
     int id;
+    int state;
     cethread_t thread;
     float executionTime;
 }_strAnts;
@@ -56,8 +57,14 @@ typedef struct {
 
 _readyLists readyLists;
 
+
+int counterAnts;
+
 typedef struct {
-    _strAnts ants[ANTS_NUMBER];
+    _strAnts ants[20];
 }_strAntsHill;
+
+_strAntsHill h1;
+_strAntsHill h2;
 
 #endif

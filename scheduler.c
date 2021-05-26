@@ -7,7 +7,7 @@ int size(_strAnts *list){
             break;
         }
         counter++;
-    } 
+    }
     return counter;
 }
 
@@ -47,7 +47,6 @@ _strAnts* first_Come_First_Served(_strAnts *list){
 _strAnts* shortest_Job_First(_strAnts *list){
     _strAnts tmpi;
     _strAnts tmpj;
-
     for(int i = 0; i < SIZE_OF_LIST; i++){
         if(list[i].id == 0){         
             break;
@@ -178,7 +177,7 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
     canal = getCanal(_canal);
     if(canal.sides == RIGHT){
         printf("Derecha\n");
-        listRight = setOrder(listRight, algorithm);
+        //listRight = setOrder(listRight, algorithm);
         if(size(listRight) >= _w){
             for(int i = 0; i < _w; i++){
                 if(listRight[i].id == 0){
@@ -202,7 +201,7 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
         }
     }else{
         printf("Izquierda\n");
-        listLeft = setOrder(listLeft, algorithm);
+        //listLeft = setOrder(listLeft, algorithm);
          printf("Parte\n");
         if(size(listLeft) >= _w){
             for(int i = 0; i < _w; i++){
@@ -231,7 +230,7 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
 void sign(_strAnts *listLeft, _strAnts *listRight, int _sign, int algorithm, int _canal){
     canal = getCanal(_canal);
     if(_sign == LEFT){
-        listLeft = setOrder(listLeft, algorithm);
+        //listLeft = setOrder(listLeft, algorithm);
         for(int i = 0; i < size(listLeft); i++){
             if(listLeft[i].id == 0){
                 break;
@@ -253,7 +252,7 @@ void tico(_strAnts *listLeft, _strAnts *listRight, int algorithm, int _canal){
     canal = getCanal(_canal);
     if(listLeft[0].thread == 0){
         canal.state = BUSY;
-        listRight = setOrder(listRight, algorithm);
+        //listRight = setOrder(listRight, algorithm);
         for(int i = 0; i < size(listRight); i++){
             if(listRight[i].id == 0){
                 break;
@@ -262,7 +261,7 @@ void tico(_strAnts *listLeft, _strAnts *listRight, int algorithm, int _canal){
         }
     }else{
         canal.state = BUSY;
-        listLeft = setOrder(listLeft, algorithm);
+        //listLeft = setOrder(listLeft, algorithm);
         for(int i = 0; i < size(listLeft); i++){
             if(listLeft[i].id == 0){
                 break;
@@ -275,24 +274,10 @@ void tico(_strAnts *listLeft, _strAnts *listRight, int algorithm, int _canal){
 void sche(_strAnts *listLeft, _strAnts *listRight, 
     int algorithm, _configCanal conf){
     if(conf.controlMethod == EQUID){
-        equid(conf.parameterW, algorithm, listLeft, listRight, conf.idCanal);
+        equid(conf.parameterW, algorithm, listLeft, listRight, conf.idCanal); // Quitar parámetros del algoritmo
     }else if(conf.controlMethod == SIGN){
         sign(listLeft, listRight, LEFT, algorithm, conf.idCanal);
     }else if(conf.controlMethod == TICO){
         tico(listLeft, listRight, algorithm, conf.idCanal);
     }
 }
-/*
- // Print just for testing 
-            for(int i = 0; i < SIZE_OF_LIST; i++){
-                if(listRight[i].id == 0){ 
-                    break;
-                }
-                printf(" \n");
-                printf("Speed: %d \n", listRight[i].speed);
-                printf("Type: %d \n", listRight[i].type);
-                printf("Canal: %d \n", listRight[i].canal);
-                printf("Ant: %d \n", listRight[i].horm);
-                printf("id: %d \n", listRight[i].id);
-                printf(" \n");
-            }*/
