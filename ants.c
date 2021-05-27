@@ -46,87 +46,44 @@ void setReadyList(_strAnts _ant){
 }
 
 
-void* parallel(void *arg){
+void* parallel(_strAnts* _ant){
+    _strAnts ant = (*(_strAnts*)_ant);
+    printf("Id: %d\n",ant.id);
+    printf("Canal: %d\n",ant.canal);
+    printf("Velocidad: %d\n",ant.speed);
     // Caminar del hormiguero a lista de listos 
     // Entrar a la lista de listos
-    // setReadyList(h1.ants[counterAnts-1]); // Talvez no funcione si se crea otra hormiga antes de llegar aquí
+    setReadyList(ant);
     // Se devuelve la posición del readyList para mover la hormiga visualmente
     // Se detiene la hormiga //Busy waiting GG
     // Se le indica que camine por el canal y salga hacia el siguiente hormiguero.
+    while (ant.state != RUNNING);
+    
+    
     return NULL;
 }
 
-void* schedulerC1(void *arg){
-    setOrder(readyLists.readyListC1R, PRIORITY);
-    setOrder(readyLists.readyListC1L, PRIORITY);
-    return NULL;
+void canalWalk(_strAnts* ant){
+    if(ant.canal == 1){
+        _configCanal conf = canalConfig(1);
+        sche(readyLists.readyListC1L, readyLists.readyListC1R, 
+            PRIORITY, conf);
+    }else if(ant.canal == 2){
+        _configCanal conf = canalConfig(2);
+        sche(readyLists.readyListC2L, readyLists.readyListC2R, 
+            FCFS, conf);
+    }else{
+        _configCanal conf = canalConfig(3);
+        sche(readyLists.readyListC3L, readyLists.readyListC3R, 
+            SJF, conf);
+    }
 }
 
-void* schedulerC2(void *arg){
-    setOrder(readyLists.readyListC1R, FCFS);
-    setOrder(readyLists.readyListC1L, FCFS);
-    return NULL;
-}
-
-void* schedulerC3(void *arg){
-    setOrder(readyLists.readyListC1R, SJF);
-    setOrder(readyLists.readyListC1L, SJF);
-    return NULL;
-}
-
-void* schedulerC123(void *arg){
-    _configCanal conf = canalConfig(1);
-    /*sche(readyLists.readyListC1L, readyLists.readyListC1R, 
-        PRIORITY, conf);*/
-    return NULL;
-}
-
-void hilos(int _horm, int _canal, _strAnts _ant){
+void hilos(_strAnts _ant){
     cethread_t thread;
-    cethread_create(&thread, parallel, (void*) 1);
+    cethread_create(&thread, parallel, (_strAnts*) &_ant);
     cethread_join(thread, NULL);
     _ant.thread = thread;
-    if(_horm == 1){
-        if(_canal == 1){
-            readyLists.readyListC1L[readyLists.counterC1L] = _ant;
-            readyLists.counterC1L += 1;
-            _configCanal conf = canalConfig(1);
-            sche(readyLists.readyListC1L, readyLists.readyListC1R, 
-                PRIORITY, conf);
-        }else if(_canal == 2){
-            readyLists.readyListC2L[readyLists.counterC2L] = _ant;
-            readyLists.counterC2L += 1;
-            _configCanal conf = canalConfig(2);
-            sche(readyLists.readyListC2L, readyLists.readyListC2R, 
-                FCFS, conf);
-        }else{
-            readyLists.readyListC3L[readyLists.counterC3L] = _ant;
-            readyLists.counterC3L += 1;
-            _configCanal conf = canalConfig(3);
-            sche(readyLists.readyListC3L, readyLists.readyListC3R, 
-                SJF, conf);
-        }
-    }else{
-        if(_canal == 1){
-            readyLists.readyListC1R[readyLists.counterC1R] = _ant;
-            readyLists.counterC1R += 1;
-            _configCanal conf = canalConfig(1);
-            sche(readyLists.readyListC1L, readyLists.readyListC1R, 
-                PRIORITY, conf);
-        }else if(_canal == 2){
-            readyLists.readyListC2R[readyLists.counterC2R] = _ant;
-            readyLists.counterC2R += 1;
-            _configCanal conf = canalConfig(2);
-            sche(readyLists.readyListC2L, readyLists.readyListC2R, 
-                FCFS, conf);
-        }else{
-            readyLists.readyListC3R[readyLists.counterC3R] = _ant;
-            readyLists.counterC3R += 1;
-            _configCanal conf = canalConfig(3);
-            sche(readyLists.readyListC3L, readyLists.readyListC3R, 
-                SJF, conf);
-        }
-    }
 }
 
 int main(){
@@ -143,9 +100,9 @@ int main(){
     float exec;
     counterAnts = 0;
     cethread_init(1);
-    cethread_t schedule;
-    cethread_create(&schedule, schedulerC1,  &counterAnts);
-    cethread_join(schedule, NULL);
+    //cethread_t schedule;
+    //cethread_create(&schedule, schedulerC1,  &counterAnts);
+    //cethread_join(schedule, NULL);
     
     while(counterAnts<10){
         printf("Tipo: ");
@@ -159,7 +116,7 @@ int main(){
         _strAnts ant = newAnt(counterAnts, horm, canal, type, exec);
         h1.ants[counterAnts] = ant;
         //while (getchar() != ENTER_ASCII_CODE);
-        hilos(horm, canal, ant);
+        hilos(ant);
         counterAnts++;
     }
 

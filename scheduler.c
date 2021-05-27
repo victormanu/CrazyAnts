@@ -124,7 +124,7 @@ _strAnts* setOrder(_strAnts *list, int algorithm){
     if (algorithm == RR) {                            
         printf("Algoritmo: RR\n");
         roundRobin(list, QUANTUM);
-        return list;         
+        return list;       
     }
     else if (algorithm == PRIORITY) {
         printf("Algoritmo: Prioridad\n");
