@@ -57,13 +57,13 @@ void* parallel(_strAnts* _ant){
     // Se devuelve la posición del readyList para mover la hormiga visualmente
     // Se detiene la hormiga //Busy waiting GG
     // Se le indica que camine por el canal y salga hacia el siguiente hormiguero.
-    while (ant.state != RUNNING);
+    while (ant.state != RUNNING_ANT);
     
     
     return NULL;
 }
 
-void canalWalk(_strAnts* ant){
+void canalWalk(_strAnts ant){
     if(ant.canal == 1){
         _configCanal conf = canalConfig(1);
         sche(readyLists.readyListC1L, readyLists.readyListC1R, 

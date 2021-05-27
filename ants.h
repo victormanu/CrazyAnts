@@ -29,8 +29,8 @@
 
 #define QUANTUM 5.7
 
-#define STOP 	0
-#define RUNNING 1
+#define STOP_ANT 	0
+#define RUNNING_ANT 1
 
 typedef struct {
     int speed;

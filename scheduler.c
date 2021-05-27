@@ -11,6 +11,49 @@ int size(_strAnts *list){
     return counter;
 }
 
+// Vaciar stack
+void emptyList(_strAnts *list){
+    printf("\nAFTER THAT, LET'S GO TO DELETE\n");
+    for(int i = 0; i < SIZE_OF_LIST; i++){
+        if(list[i].id == 0){
+            printf("\nFinal lista en emptyList\n");
+            break;
+        }
+        list[i].id = 0;
+    }
+    printf("\nNumber of elements present in given array: %d \n", size(list));
+}
+
+void deleteUntilW(_strAnts *list, int W){
+    int Size = size(list);
+    for(int i = W; i < SIZE_OF_LIST; i++){
+        if(list[i].id == 0){
+            break;
+        }
+        list[i-W] = list[i];
+    }
+    for(int i = (Size-W); i < 100; i++){
+        if(list[i].id == 0){
+            break;
+        }
+        list[i].id = 0;
+    }
+    for(int i = 0; i < SIZE_OF_LIST; i++){
+        if(list[i].id == 0){
+            break;
+        }
+        printf("\n deleteUntilW PRINT \n ");
+        printf("Speed: %d \n", list[i].speed);
+        printf("Type: %d \n", list[i].type);
+        printf("Canal: %d \n", list[i].canal);
+        printf("Ant: %d \n", list[i].horm);
+        printf("id: %d \n", list[i].id);
+        printf("Tiempo de ejecucion: %f \n", list[i].executionTime);
+        printf(" \n");
+        printf("\nNumber of elements present in given array: %d \n", size(list));
+    }
+}
+
 /* 
     Alogirtmo FCFS: Primero en Llegar, Primero en ser Servido
  */
@@ -23,21 +66,6 @@ _strAnts* first_Come_First_Served(_strAnts *list){
         }
         reorderedList = list[i];
         list[i] = reorderedList;
-    }
-    // Impresiones de prueba
-    for(int i = 0; i < SIZE_OF_LIST; i++){
-        if(list[i].id == 0){         
-            break;
-        }
-        printf(" \n");
-        printf("Speed: %d \n", list[i].speed);
-        printf("Type: %d \n", list[i].type);
-        printf("Canal: %d \n", list[i].canal);
-        printf("Ant: %d \n", list[i].horm);
-        printf("id: %d \n", list[i].id);    
-        printf("Tiempo de ejecucion: %f \n", list[i].executionTime);
-        printf(" \n");
-        printf("Number of elements present in given array: %d \n", size(list));    
     }
     return list;
 }
@@ -64,24 +92,6 @@ _strAnts* shortest_Job_First(_strAnts *list){
                 tmpi = list[i];
             }
         } 
-    }
-    // Print just for testing 
-    for(int i = 0; i < SIZE_OF_LIST; i++){
-        if(list[i].id == 0){         
-            //printf("\nPRIORITY NULL\n"); 
-            break;
-        }
-        printf(" \n");
-        printf("Speed: %d \n", list[i].speed);
-        printf("Type: %d \n", list[i].type);
-        printf("Canal: %d \n", list[i].canal);
-        printf("Ant: %d \n", list[i].horm);
-        printf("id: %d \n", list[i].id);
-        printf("Tiempo de ejecucion: %f \n", list[i].executionTime);
-        printf(" \n");
-        //int length = sizeof(list)/sizeof(list[0]);            
-        printf("Number of elements present in given array: %d", size(list));    
-        printf(" \n");
     }
     return list;
 }
@@ -177,7 +187,6 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
     canal = getCanal(_canal);
     if(canal.sides == RIGHT){
         printf("Derecha\n");
-        //listRight = setOrder(listRight, algorithm);
         if(size(listRight) >= _w){
             for(int i = 0; i < _w; i++){
                 if(listRight[i].id == 0){
@@ -185,6 +194,7 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
                 }
                 canal.ants[i] = listRight[i];
             }
+            deleteUntilW(listRight, _w);
             canal.sides = LEFT;
         }else{
             for(int i = 0; i < size(listRight); i++){
@@ -194,6 +204,7 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
                 canal.ants[i] = listRight[i];
                 addCanalCounter(canal, RIGHT);
             }
+            deleteUntilW(listRight, size(listRight));
         }
         int counter = getCounterCanal(canal, RIGHT);
         if(counter >= _w){
@@ -210,6 +221,7 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
                 }
                 canal.ants[i] = listLeft[i];
             }
+            deleteUntilW(listLeft, _w);
             canal.sides = RIGHT;
         }else{
             for(int i = 0; i < size(listLeft); i++){
@@ -219,6 +231,7 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
                 canal.ants[i] = listLeft[i];
                 addCanalCounter(canal, LEFT);
             }
+            deleteUntilW(listLeft, size(listLeft));
         }
         int counter = getCounterCanal(canal, RIGHT);
         if(counter >= _w){
@@ -230,13 +243,13 @@ void equid(int _w, int algorithm, _strAnts *listLeft, _strAnts *listRight, int _
 void sign(_strAnts *listLeft, _strAnts *listRight, int _sign, int algorithm, int _canal){
     canal = getCanal(_canal);
     if(_sign == LEFT){
-        //listLeft = setOrder(listLeft, algorithm);
         for(int i = 0; i < size(listLeft); i++){
             if(listLeft[i].id == 0){
                 break;
             }
             canal.ants[i] = listLeft[i];
         }
+        deleteUntilW(listLeft, size(listLeft));
     }else{
         listRight = setOrder(listRight, algorithm);
         for(int i = 0; i < size(listRight); i++){
@@ -245,6 +258,7 @@ void sign(_strAnts *listLeft, _strAnts *listRight, int _sign, int algorithm, int
             }
             canal.ants[i] = listRight[i];
         }
+        deleteUntilW(listRight, size(listRight));
     }
 }
 
@@ -252,22 +266,22 @@ void tico(_strAnts *listLeft, _strAnts *listRight, int algorithm, int _canal){
     canal = getCanal(_canal);
     if(listLeft[0].thread == 0){
         canal.state = BUSY;
-        //listRight = setOrder(listRight, algorithm);
         for(int i = 0; i < size(listRight); i++){
             if(listRight[i].id == 0){
                 break;
             }
             canal.ants[i] = listRight[i];
         }
+        deleteUntilW(listRight, size(listRight));
     }else{
         canal.state = BUSY;
-        //listLeft = setOrder(listLeft, algorithm);
         for(int i = 0; i < size(listLeft); i++){
             if(listLeft[i].id == 0){
                 break;
             }
             canal.ants[i] = listLeft[i];
         }
+        deleteUntilW(listLeft, size(listLeft));
     }
 }
 
